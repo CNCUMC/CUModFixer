@@ -10,7 +10,7 @@ namespace CUModFixer;
 public class Plugin : BaseUnityPlugin
 {
     public const string Guid = "org.cncumc.cumodfixer";
-    public const string Name = "CUMod Fixer";
+    public const string Name = "CUModFixer";
     public const string Version = "1.0.0";
     internal new static ManualLogSource Logger;
     private readonly Harmony _harmony = new(Guid);
