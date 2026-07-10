@@ -1,6 +1,6 @@
 ![Logo](Logo.png)
 
-# CUMod Fixer
+# CUModFixer
 
 [中文指南](README_ZH.md)
 
