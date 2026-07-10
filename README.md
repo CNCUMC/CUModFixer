@@ -1,174 +1,64 @@
-# Moss-Template
+![Logo](Logo.png)
 
-一个用于开发 `Casualties Unknown` 模组的 [dotnet new](https://learn.microsoft.com/zh-cn/dotnet/core/tools/dotnet-new)
-模板。
+# CUMod Fixer
 
-基于 [05126619z/ScavTemplate](https://github.com/05126619z/ScavTemplate)。
+[中文指南](README_ZH.md)
 
----
+[GitHub](https://github.com/CNCUMC/CUModFixer) | [NexusMods](https://www.nexusmods.com/scavprototype/mods/424)
 
-## 快速开始
-
-### 方式一：使用 `NewMod.ps1`（推荐）
-
-1. 克隆本仓库并注册模板：
-
-```powershell
-git clone https://github.com/CNCUMC/Moss-Template.git
-cd Moss-Template
-dotnet new install .
-```
-
-2. 在任意目录运行创建脚本：
-
-```powershell
-cd E:/Projects  # 你想创建项目的目录
-<path-to>\NewMod.ps1
-```
-
-脚本会自动：
-
-- 搜索 Steam 安装路径中的 Casualties Unknown 游戏目录
-- 交互式提示输入模组名称、GUID、版本等信息
-- 调用 `dotnet new cumodfixer` 生成项目
-- 所有文件名和内容自动替换完成
-
-3. 构建并测试：
-
-```powershell
-cd MyCoolMod
-dotnet build
-```
-
-### 方式二：使用 `dotnet new` 命令
-
-注册模板后（见上方第 1 步），直接使用命令行：
-
-```powershell
-dotnet new cumodfixer -n MyCoolMod `
-    --ModDisplayName "My Cool Mod" `
-    --ModGuid "com.example.mycoolmod" `
-    --ModVersion "1.0.0" `
-    --AuthorName "Your Name" `
-    --GameManagedDir "E:/SteamLibrary/steamapps/common/Casualties Unknown Demo/CasualtiesUnknown_Data/Managed"
-```
-
-### 方式三：从 GitHub 克隆（传统方式）
-
-1. 在 GitHub 上点击 [Use this template](https://github.com/new?template_name=Moss-Template) 创建仓库
-2. 克隆仓库后手动替换文件名和内容中的 `CUModFixer`
-3. 参考下方手动配置步骤
+_A BepInEx plugin for [Casualties Unknown](https://store.steampowered.com/app/3624440/Casualties_Unknown_Demo/) that fixes compatibility issues with third-party mods._
 
 ---
 
-## 模板参数说明
+## Overview
 
-| 参数                 | 说明                             | 默认值                 |
-|--------------------|--------------------------------|---------------------|
-| `-n` / `--name`    | 项目名称（PascalCase，如 `MyCoolMod`） | 必填                  |
-| `--ModDisplayName` | 模组显示名称（如 `My Cool Mod`）        | 从名称自动生成             |
-| `--ModGuid`        | 模组唯一标识（格式 `yourname.modname`）  | `com.example.mymod` |
-| `--ModVersion`     | 初始版本号                          | `1.0.0`             |
-| `--AuthorName`     | 作者名称（用于 LICENSE）               | `Your Name`         |
-| `--GameManagedDir` | 游戏 Managed 目录路径                | Steam 默认路径          |
+**CUMod Fixer** is a compatibility patch plugin that resolves conflicts
+between [Casualties Unknown](https://store.steampowered.com/app/3624440/Casualties_Unknown_Demo/), [KrokoshaCasualtiesMP](https://www.nexusmods.com/scavprototype/mods/67) (
+multiplayer mod), and third-party mods like [New Firearms](https://www.nexusmods.com/scavprototype/mods/122).
 
-模板会自动替换以下内容：
-
-- `CUModFixer.csproj` → `{项目名}.csproj`
-- `namespace CUModFixer` → `namespace {项目名}`
-- `org.cncumc.cumodfixer` → `{ModGuid}`
-- `CUMod Fixer` → `{ModDisplayName}`
-- 版本号、LICENSE 作者名、csproj 中的游戏 DLL 路径
+| Fix                          | Description                                                                                                                       |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| **NewFirearms MpScareCheck** | Prevents `RshGun.MpScareCheck()` from throwing exceptions when `KrokoshaScavMultiGameObjectNetworkTracker` is missing on the item |
 
 ---
 
-## 关于 StartGame.ps1
+## Requirements
 
-[StartGame.ps1](StartGame.ps1) 会将编译好的 DLL 文件复制到游戏目录下的 BepInEx 插件目录，并自动启动游戏。
+- [BepInEx 5.x](https://github.com/BepInEx/BepInEx)
+- [KrokoshaCasualtiesMP](https://www.nexusmods.com/scavprototype/mods/67) ≥ 4.0.0
+- [New Firearms](https://www.nexusmods.com/scavprototype/mods/122) ≥ 1.5.0
 
-**参数：**
+## Installation
 
-- `$GamePath` — 游戏安装目录（如 `E:/SteamLibrary/steamapps/common/Casualties Unknown Demo`）
-- `$ModNamespace` — 模组命名空间（如 `MyCoolMod`）
-
-**命令行运行：**
-
-```powershell
-.\StartGame.ps1 -GamePath "E:/SteamLibrary/steamapps/common/Casualties Unknown Demo" -ModNamespace "MyCoolMod"
-```
-
-### JetBrains Rider 配置
-
-1. 右键 [StartGame.ps1](StartGame.ps1) → `运行 'StartGame.ps1'`
-2. 点击编辑器右上角构建按钮旁的 `StartGame.ps1` 按钮 → `编辑配置...`
-3. 填写 `Script arguments:`：`"E:/SteamLibrary/steamapps/common/Casualties Unknown Demo" "MyCoolMod"`
-4. 设置 `Command parameters`：`-ExecutionPolicy Bypass`
-5. 点击 `执行前` 旁的加号 → `构建解决方案` → 确定
-
-之后每次按绿三角按钮即可自动构建、复制 DLL、启动游戏。
-
-### Visual Studio
-
-右键 [StartGame.ps1](StartGame.ps1) 选择 `运行`，手动填写参数。具体配置方式请自行研究。:P
+1. Install BepInEx 5.x for Casualties Unknown.
+2. Install [KrokoshaCasualtiesMP](https://www.nexusmods.com/scavprototype/mods/67) — place into `BepInEx/plugins/`.
+3. Install [New Firearms](https://www.nexusmods.com/scavprototype/mods/122) — place into `BepInEx/plugins/`.
+4. Download the latest `CUModFixer.dll` from [Releases](https://github.com/CNCUMC/CUModFixer/releases).
+5. Place `CUModFixer.dll` into `BepInEx/plugins/`.
 
 ---
 
-## 发布模组 (Release.ps1)
+## How It Works
 
-[Release.ps1](Release.ps1) 用于构建、打包并发布模组到 NexusMods 和 GitHub Release。
+### NewFirearms MpScareCheck Fix
 
-**基本用法：**
-```powershell
-.\Release.ps1                          # 交互式确认版本号后发布
-.\Release.ps1 -SkipNexus               # 只发 GitHub
-.\Release.ps1 -SkipBuild -SkipGitHub   # 只发 NexusMods（跳过构建）
-```
+The `RshGun.MpScareCheck()` method in New Firearms calls `GetMpTracker()` which expects a
+`KrokoshaScavMultiGameObjectNetworkTracker` component to be present on the item's GameObject. During world generation,
+some items may not yet have this component attached, causing repeated exceptions.
 
-### NexusMods API Key 设置
+This plugin applies a Harmony patch with:
 
-1. 登录 [NexusMods](https://www.nexusmods.com/)
-2. 进入 [API Access](https://www.nexusmods.com/casualtiesunknown/users/myaccount?tab=api) 页面
-3. 点击 `REQUEST API KEY` 获取 Key
+1. **Prefix** — Uses reflection to check if the tracker component exists before allowing the original method to run
+2. **Finalizer** — Catches and suppresses any exceptions that still occur (defense in depth)
 
-**使用方式：**
-```powershell
-# 环境变量（推荐，一次设置永久有效）
-$env:NEXUS_API_KEY = "你的API Key"
-.\Release.ps1
+The patch is installed:
 
-# 或命令行参数
-.\Release.ps1 -NexusApiKey "你的API Key"
-```
+- Immediately on `Awake()` if NewFirearms is already loaded
+- Via `AssemblyLoad` event if NewFirearms loads after this plugin
 
-### GitHub 认证
-
-```powershell
-# 安装 GitHub CLI
-winget install GitHub.cli
-
-# 登录
-gh auth login
-```
 
 ---
 
-## csproj 引用说明
+## License
 
-模板包含 15 个核心游戏 DLL 引用。所有路径通过 `Directory.Build.props` 中的 MSBuild 属性管理：
-
-| 属性 | 说明 | 示例 |
-|------|------|------|
-| `$(GameDir)` | 游戏根目录 | `F:/SteamLibrary/steamapps/common/Casualties Unknown Demo` |
-| `$(ManagedDir)` | Managed 目录 | `$(GameDir)/CasualtiesUnknown_Data/Managed` |
-| `$(CUCoreLibDll)` | CUCoreLib 路径（可选） | `$(GameDir)/BepInEx/plugins/CUCoreLib.dll` |
-
-如需额外引用（如动画、音频、粒子等），在 csproj 中取消注释或添加新条目：
-
-```xml
-<!-- 例如：添加音频模块 -->
-<Reference Include="UnityEngine.AudioModule">
-    <HintPath>$(ManagedDir)/UnityEngine.AudioModule.dll</HintPath>
-</Reference>
-```
-
-> **注意：** 首次使用时复制 `Directory.Build.props.example` 为 `Directory.Build.props` 并填写你的游戏路径。
+[LGPL v3](LICENSE.md)
