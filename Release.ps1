@@ -45,9 +45,9 @@
 #>
 param(
     [string]$ModNamespace = "CUModFixer",
-    [string]$ModDisplayName = "__MOD_DISPLAY_NAME__",
-    [string]$ModVersion = "__MOD_VERSION__",
-    [int]$NexusModId = 0,
+    [string]$ModDisplayName = "CUModFixer",
+    [string]$ModVersion = "1.0.0",
+    [int]$NexusModId = 424,
     [string]$Configuration = "Release",
     [string]$NexusApiKey = $env:NEXUS_API_KEY,
     [string]$GamePath,
