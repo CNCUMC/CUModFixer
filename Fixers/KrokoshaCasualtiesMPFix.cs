@@ -20,7 +20,7 @@ internal class KrokoshaCasualtiesMPFix
     {
         return AccessTools.DeclaredMethod(TargetType, "Update");
     }
-    
-    [HarmonyFinalizer] 
+
+    [HarmonyFinalizer]
     public static Exception Finalizer(Exception __e) => null;
 }

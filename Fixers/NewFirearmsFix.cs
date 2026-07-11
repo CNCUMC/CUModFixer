@@ -15,9 +15,9 @@ internal class MpScareCheckGuard
     {
         return TargetType != null;
     }
-    
-    [HarmonyTargetMethod] 
-    public static MethodBase TargetMethod() 
+
+    [HarmonyTargetMethod]
+    public static MethodBase TargetMethod()
     {
         return AccessTools.DeclaredMethod(TargetType, "MpScareCheck");
     }
@@ -55,9 +55,9 @@ internal class IsOnBackGuard
     {
         return AccessTools.TypeByName("NewFirearms.RshGun") != null;
     }
-    
-    [HarmonyTargetMethod] 
-    public static MethodBase TargetMethod() 
+
+    [HarmonyTargetMethod]
+    public static MethodBase TargetMethod()
     {
         return AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.RshGun"), "IsOnBack");
     }
@@ -81,13 +81,13 @@ internal class LegacyGunUiGuard
     {
         return AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1") != null;
     }
-    
-    [HarmonyTargetMethod] 
-    public static MethodBase TargetMethod() 
+
+    [HarmonyTargetMethod]
+    public static MethodBase TargetMethod()
     {
         return AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1"), "HandleLegacyGunUi");
     }
-    
+
     [HarmonyFinalizer] public static Exception Finalizer(Exception __e) => null;
 }
 

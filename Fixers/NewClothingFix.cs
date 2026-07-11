@@ -13,17 +13,13 @@ internal class NewClothingFix
     [HarmonyPrepare] 
     public static bool Prepare() 
     {
-        var ok = TargetType != null;
-        Plugin.Logger.LogInfo($"[DEBUG] NewClothingFix.Prepare: TargetType={TargetType != null}, ok={ok}");
-        return ok;
+        return TargetType != null;
     }
     
     [HarmonyTargetMethod] 
     public static MethodBase TargetMethod() 
     {
-        var m = AccessTools.DeclaredMethod(TargetType, "Update");
-        Plugin.Logger.LogInfo($"[DEBUG] NewClothingFix.TargetMethod: method={m != null}");
-        return m;
+        return AccessTools.DeclaredMethod(TargetType, "Update");
     }
 
     [HarmonyFinalizer]
