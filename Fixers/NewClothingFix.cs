@@ -5,7 +5,6 @@ using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-[BepInDependency("com.rushellxyz.newclothing", BepInDependency.DependencyFlags.SoftDependency)]
 internal static class NewClothingFix
 {
     private static Type Type => AccessTools.TypeByName("NewClothing.RshClothing");

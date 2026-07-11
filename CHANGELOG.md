@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 - **Refactored to Harmony annotations** — all fixer classes converted from manual `Install(Harmony)` to `[HarmonyPatch]` annotations, auto-discovered by `PatchAll()`
-- **Plugin.cs simplified** — removed `OnAssemblyLoad` event and manual `Install()` calls; uses `[BepInDependency(SoftDependency)]` + `Harmony.CreateAndPatchAll()`
+- **Plugin.cs simplified** — removed `OnAssemblyLoad` event and manual `Install()` calls; uses `[BepInDependency(SoftDependency)]` + `PatchAll()`
 - **NewFirearmsFix.cs consolidated** — 4 patch guards merged into single file (`NewFirearmsFix.cs`) with per-method `[HarmonyPatch]` attributes
 - **KrokoshaCasualtiesMPFix.cs converted** — from manual `Install()` to `[HarmonyPatch("TypeName", "MethodName")]` annotation syntax
 - **NewClothingFix.cs converted** — same annotation pattern

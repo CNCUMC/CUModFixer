@@ -4,7 +4,6 @@ using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-[BepInDependency("com.rushellxyz.newfirearms", BepInDependency.DependencyFlags.SoftDependency)]
 internal static class NewFirearmsFix
 {
     private static bool _isOnBackWarned;

@@ -4,7 +4,6 @@ using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-[BepInDependency("KrokoshaCasualtiesMP", BepInDependency.DependencyFlags.SoftDependency)]
 internal static class KrokoshaCasualtiesMPFix
 {
     [HarmonyPatch("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent", "Update")]
