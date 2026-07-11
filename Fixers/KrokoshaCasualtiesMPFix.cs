@@ -5,20 +5,18 @@ using HarmonyLib;
 namespace CUModFixer.Fixers;
 
 [HarmonyPatch]
-internal class KrokoshaCasualtiesMPFix
+class KrokoshaCasualtiesMPFix
 {
-    private static Type TargetType => AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent");
-    
     [HarmonyPrepare]
     public static bool Prepare()
     {
-        return TargetType != null;
+        return AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent") != null;
     }
-    
-    [HarmonyTargetMethod] 
-    public static MethodBase TargetMethod() 
+
+    [HarmonyTargetMethod]
+    public static MethodBase TargetMethod()
     {
-        return AccessTools.DeclaredMethod(TargetType, "Update");
+        return AccessTools.DeclaredMethod(AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent"), "Update");
     }
 
     [HarmonyFinalizer]
