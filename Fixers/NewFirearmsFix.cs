@@ -6,103 +6,94 @@ namespace CUModFixer.Fixers;
 
 // ── MpScareCheck ──
 [HarmonyPatch]
-internal class MpScareCheckGuard
+internal static class MpScareCheckGuard
 {
-    private static Type TargetType => AccessTools.TypeByName("NewFirearms.RshGun");
-
     [HarmonyPrepare]
-    public static bool Prepare()
-    {
-        return TargetType != null;
-    }
+    public static bool Prepare() => AccessTools.TypeByName("NewFirearms.RshGun") != null;
 
     [HarmonyTargetMethod]
-    public static MethodBase TargetMethod()
-    {
-        return AccessTools.DeclaredMethod(TargetType, "MpScareCheck");
-    }
+    public static MethodInfo GetTargetMethod() => AccessTools.Method(AccessTools.TypeByName("NewFirearms.RshGun"), "MpScareCheck");
 
+    // Prefix: skip original if no Krokosha tracker component exists (prevents "Attempt to action on item without..." exception)
     [HarmonyPrefix]
-    public static bool Prefix(object __instance)
+    public static bool SkipIfNoTracker(object __instance)
     {
         try
         {
             var mb = __instance as UnityEngine.MonoBehaviour;
-            if (mb == null) return false;
-            var tt = Type.GetType("KrokoshaCasualtiesMP.KrokoshaScavMultiGameObjectNetworkTracker, KrokoshaCasualtiesMP");
-            return tt != null && mb.gameObject.GetComponent(tt) != null;
+            if (mb == null) return true; // No MonoBehaviour, allow original
+
+            var trackerType = Type.GetType("KrokoshaCasualtiesMP.KrokoshaScavMultiGameObjectNetworkTracker, KrokoshaCasualtiesMP");
+            if (trackerType == null) return true; // No tracker type at all, allow original
+
+            // If gun has NO tracker component, skip the original to prevent exception
+            var hasTracker = mb.gameObject.GetComponent(trackerType) != null;
+            return hasTracker;
         }
-        catch { return false; }
+        catch 
+        {
+            return false; // On error, skip original to prevent exception
+        }
     }
 
+    // Finalizer: suppress all exceptions from MpScareCheck (safety net)
     [HarmonyFinalizer]
-    public static Exception Finalizer(Exception __e)
+    public static void SuppressException(Exception __e)
     {
-        if (__e == null) return null;
+        if (__e == null) return;
         Plugin.Logger.LogWarning($"Suppressed NewFirearms MpScareCheck exception: {__e.Message}");
-        return null;
     }
 }
 
 // ── IsOnBack ──
 [HarmonyPatch]
-internal class IsOnBackGuard
+internal static class IsOnBackGuard
 {
-    private static bool _warned;
-
     [HarmonyPrepare]
-    public static bool Prepare()
-    {
-        return AccessTools.TypeByName("NewFirearms.RshGun") != null;
-    }
+    public static bool Prepare() => AccessTools.TypeByName("NewFirearms.RshGun") != null;
 
     [HarmonyTargetMethod]
-    public static MethodBase TargetMethod()
-    {
-        return AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.RshGun"), "IsOnBack");
-    }
+    public static MethodInfo GetTargetMethod() => AccessTools.Method(AccessTools.TypeByName("NewFirearms.RshGun"), "IsOnBack");
 
     [HarmonyFinalizer]
-    public static Exception Finalizer(Exception __e, ref bool __r)
+    public static void SuppressException(Exception __e, ref bool __r)
     {
-        if (__e == null) return null;
-        if (!_warned) { Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__e.Message}"); _warned = true; }
+        if (__e == null) return;
+        if (_isOnBackWarned) return;
+        Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__e.Message}");
+        _isOnBackWarned = true;
         __r = false;
-        return null;
     }
+
+    private static bool _isOnBackWarned;
 }
 
 // ── HandleLegacyGunUi ──
 [HarmonyPatch]
-internal class LegacyGunUiGuard
+internal static class LegacyGunUiGuard
 {
     [HarmonyPrepare]
-    public static bool Prepare()
-    {
-        return AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1") != null;
-    }
+    public static bool Prepare() => AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1") != null;
 
     [HarmonyTargetMethod]
-    public static MethodBase TargetMethod()
-    {
-        return AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1"), "HandleLegacyGunUi");
-    }
+    public static MethodInfo GetTargetMethod() => AccessTools.Method(AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1"), "HandleLegacyGunUi");
 
-    [HarmonyFinalizer] public static Exception Finalizer(Exception __e) => null;
+    [HarmonyFinalizer]
+    public static void SuppressException(Exception __e) { }
 }
 
 // ── Stun collider log spam ──
-[HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", new[] { typeof(object) })]
-internal class StunLogGuard
+[HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", [typeof(object)])]
+internal static class StunLogGuard
 {
-    private static bool _warned;
-
     [HarmonyPrefix]
-    public static bool Prefix(object message)
+    public static bool FilterStunWarning(object message)
     {
         if (message?.ToString()?.Contains("Can not add stun collider") != true) return true;
-        if (_warned) return false;
-        _warned = true;
+        if (_stunWarned) return false;
+        _stunWarned = true;
         return true;
     }
+
+    private static bool _stunWarned;
 }
