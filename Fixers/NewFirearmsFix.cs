@@ -1,100 +1,58 @@
 using System;
+using BepInEx;
 using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
+[BepInDependency("com.rushellxyz.newfirearms", BepInDependency.DependencyFlags.SoftDependency)]
 internal static class NewFirearmsFix
 {
-    private static bool _installed;
     private static bool _isOnBackWarned;
+    private static bool _stunWarned;
 
-    internal static void Install(Harmony harmony)
-    {
-        if (_installed) return;
-
-        var nfAsm = Type.GetType("NewFirearms.RshGun, NewFirearms")?.Assembly;
-        if (nfAsm == null) return;
-
-        var rshGunType = nfAsm.GetType("NewFirearms.RshGun");
-
-        var mpScareCheck = AccessTools.Method(rshGunType, "MpScareCheck");
-        if (mpScareCheck != null)
-        {
-            harmony.Patch(mpScareCheck,
-                prefix: new HarmonyMethod(typeof(NewFirearmsFix), nameof(MpScareCheckPrefix)),
-                finalizer: new HarmonyMethod(typeof(NewFirearmsFix), nameof(MpScareCheckFinalizer)));
-        }
-
-        var isOnBack = AccessTools.Method(rshGunType, "IsOnBack");
-        if (isOnBack != null)
-        {
-            harmony.Patch(isOnBack,
-                finalizer: new HarmonyMethod(typeof(NewFirearmsFix), nameof(IsOnBackFinalizer)));
-        }
-
-        var cameraPatchType = nfAsm.GetType("NewFirearms.PlayerCameraPatch1");
-        if (cameraPatchType != null)
-        {
-            var handleGunUi = AccessTools.Method(cameraPatchType, "HandleLegacyGunUi");
-            if (handleGunUi != null)
-            {
-                harmony.Patch(handleGunUi,
-                    finalizer: new HarmonyMethod(typeof(NewFirearmsFix), nameof(HandleLegacyGunUiFinalizer)));
-            }
-        }
-
-        _installed = true;
-        Plugin.Logger.LogInfo("NewFirearms patches installed.");
-    }
-
+    [HarmonyPatch("NewFirearms.RshGun", "MpScareCheck")]
+    [HarmonyPrefix]
     public static bool MpScareCheckPrefix(object __instance)
     {
         try
         {
             var mb = __instance as UnityEngine.MonoBehaviour;
             if (mb == null) return false;
-            var trackerType = Type.GetType("KrokoshaCasualtiesMP.KrokoshaScavMultiGameObjectNetworkTracker, KrokoshaCasualtiesMP");
-            if (trackerType == null) return false;
-            return mb.gameObject.GetComponent(trackerType) != null;
+            var tt = Type.GetType("KrokoshaCasualtiesMP.KrokoshaScavMultiGameObjectNetworkTracker, KrokoshaCasualtiesMP");
+            return tt != null && mb.gameObject.GetComponent(tt) != null;
         }
         catch { return false; }
     }
 
-    public static Exception MpScareCheckFinalizer(Exception __exception)
+    [HarmonyPatch("NewFirearms.RshGun", "MpScareCheck")]
+    [HarmonyFinalizer]
+    public static Exception MpScareCheckFin(Exception __e)
     {
-        if (__exception == null) return null;
-        Plugin.Logger.LogWarning($"Suppressed NewFirearms MpScareCheck exception: {__exception.Message}");
+        if (__e == null) return null;
+        Plugin.Logger.LogWarning($"Suppressed NewFirearms MpScareCheck exception: {__e.Message}");
         return null;
     }
 
-    public static Exception IsOnBackFinalizer(Exception __exception, ref bool __result)
+    [HarmonyPatch("NewFirearms.RshGun", "IsOnBack")]
+    [HarmonyFinalizer]
+    public static Exception IsOnBackFin(Exception __e, ref bool __r)
     {
-        if (__exception == null) return null;
-        if (!_isOnBackWarned)
-        {
-            Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__exception.Message}");
-            _isOnBackWarned = true;
-        }
-        __result = false;
+        if (__e == null) return null;
+        if (!_isOnBackWarned) { Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__e.Message}"); _isOnBackWarned = true; }
+        __r = false;
         return null;
     }
 
-    public static Exception HandleLegacyGunUiFinalizer(Exception __exception) => null;
-}
+    [HarmonyPatch("NewFirearms.PlayerCameraPatch1", "HandleLegacyGunUi")]
+    [HarmonyFinalizer]
+    public static Exception HandleLegacyGunUiFin(Exception __e) => null;
 
-[HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", [typeof(object)])]
-internal static class StunLogSuppressor
-{
-    [HarmonyPrepare]
-    public static bool Prepare() =>
-        Type.GetType("NewFirearms.RshGun, NewFirearms") != null;
-
-    private static bool _stunWarned;
-
+    // ── Stun collider log spam ──
+    [HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", [typeof(object)])]
     [HarmonyPrefix]
-    public static bool Prefix(object message)
+    public static bool StunLogPrefix(object message)
     {
-        if (message?.ToString().Contains("Can not add stun collider") != true) return true;
+        if (message?.ToString()?.Contains("Can not add stun collider") != true) return true;
         if (_stunWarned) return false;
         _stunWarned = true;
         return true;

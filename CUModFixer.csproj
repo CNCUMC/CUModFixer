@@ -35,8 +35,8 @@
         <Reference Include="Assembly-CSharp">
             <HintPath>$(ManagedDir)/Assembly-CSharp.dll</HintPath>
         </Reference>
-        <Reference Include="NewFirearms">
-          <HintPath>F:\SteamLibrary\steamapps\common\Casualties Unknown Demo\BepInEx\plugins\NewFirearms.dll</HintPath>
+        <Reference Include="buildmodBetter">
+          <HintPath>F:\SteamLibrary\steamapps\common\Casualties Unknown Demo\BepInEx\plugins\buildmod\BuildMod.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
             <HintPath>$(ManagedDir)/UnityEngine.dll</HintPath>
