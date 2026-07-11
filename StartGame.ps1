@@ -19,7 +19,7 @@ function Convert-ToDisplayName {
     return $result.ToString()
 }
 
-$ModName = Convert-ToDisplayName -Namespace $ModNamespace
+$ModName = $ModNamespace
 
 $OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding = [System.Text.Encoding]::UTF8
