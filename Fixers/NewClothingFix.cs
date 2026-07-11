@@ -6,6 +6,7 @@ namespace CUModFixer.Fixers;
 internal static class NewClothingFix
 {
     private static bool _installed;
+    private static bool _warned;
 
     internal static void Install(Harmony harmony)
     {
@@ -35,7 +36,9 @@ internal static class NewClothingFix
             case null:
                 return null;
             case NullReferenceException:
+                if (_warned) return null;
                 Plugin.Logger.LogWarning($"Suppressed NRE in RshClothing.Update: {__exception.Message}");
+                _warned = true;
                 return null;
             default:
                 return __exception;
