@@ -368,7 +368,10 @@ if (-not $SkipGitHub) {
                 )
 
                 if ($ReleaseNotes) {
-                    $ghArgs += @("--notes", $ReleaseNotes)
+                    # 保存到临时文件避免命令行转义问题
+                    $notesFile = [System.IO.Path]::GetTempFileName()
+                    $ReleaseNotes | Out-File -FilePath $notesFile -Encoding UTF8 -NoNewline
+                    $ghArgs += @("--notes-file", $notesFile)
                 } else {
                     $ghArgs += @("--generate-notes")
                 }
