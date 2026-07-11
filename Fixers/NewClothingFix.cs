@@ -10,8 +10,21 @@ internal class NewClothingFix
     private static Type TargetType => AccessTools.TypeByName("NewClothing.RshClothing");
     private static bool _warned;
 
-    [HarmonyPrepare] public static bool Prepare() => TargetType != null;
-    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.DeclaredMethod(TargetType, "Update");
+    [HarmonyPrepare] 
+    public static bool Prepare() 
+    {
+        var ok = TargetType != null;
+        Plugin.Logger.LogInfo($"[DEBUG] NewClothingFix.Prepare: TargetType={TargetType != null}, ok={ok}");
+        return ok;
+    }
+    
+    [HarmonyTargetMethod] 
+    public static MethodBase TargetMethod() 
+    {
+        var m = AccessTools.DeclaredMethod(TargetType, "Update");
+        Plugin.Logger.LogInfo($"[DEBUG] NewClothingFix.TargetMethod: method={m != null}");
+        return m;
+    }
 
     [HarmonyFinalizer]
     public static Exception Finalizer(Exception __e)

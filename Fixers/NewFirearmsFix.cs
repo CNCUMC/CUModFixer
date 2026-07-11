@@ -10,8 +10,17 @@ internal class MpScareCheckGuard
 {
     private static Type TargetType => AccessTools.TypeByName("NewFirearms.RshGun");
 
-    [HarmonyPrepare] public static bool Prepare() => TargetType != null;
-    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.DeclaredMethod(TargetType, "MpScareCheck");
+    [HarmonyPrepare]
+    public static bool Prepare()
+    {
+        return TargetType != null;
+    }
+    
+    [HarmonyTargetMethod] 
+    public static MethodBase TargetMethod() 
+    {
+        return AccessTools.DeclaredMethod(TargetType, "MpScareCheck");
+    }
 
     [HarmonyPrefix]
     public static bool Prefix(object __instance)
@@ -41,8 +50,17 @@ internal class IsOnBackGuard
 {
     private static bool _warned;
 
-    [HarmonyPrepare] public static bool Prepare() => AccessTools.TypeByName("NewFirearms.RshGun") != null;
-    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.RshGun"), "IsOnBack");
+    [HarmonyPrepare]
+    public static bool Prepare()
+    {
+        return AccessTools.TypeByName("NewFirearms.RshGun") != null;
+    }
+    
+    [HarmonyTargetMethod] 
+    public static MethodBase TargetMethod() 
+    {
+        return AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.RshGun"), "IsOnBack");
+    }
 
     [HarmonyFinalizer]
     public static Exception Finalizer(Exception __e, ref bool __r)
@@ -58,8 +76,18 @@ internal class IsOnBackGuard
 [HarmonyPatch]
 internal class LegacyGunUiGuard
 {
-    [HarmonyPrepare] public static bool Prepare() => AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1") != null;
-    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1"), "HandleLegacyGunUi");
+    [HarmonyPrepare]
+    public static bool Prepare()
+    {
+        return AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1") != null;
+    }
+    
+    [HarmonyTargetMethod] 
+    public static MethodBase TargetMethod() 
+    {
+        return AccessTools.DeclaredMethod(AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1"), "HandleLegacyGunUi");
+    }
+    
     [HarmonyFinalizer] public static Exception Finalizer(Exception __e) => null;
 }
 

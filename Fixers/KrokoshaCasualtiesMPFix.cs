@@ -7,7 +7,20 @@ namespace CUModFixer.Fixers;
 [HarmonyPatch]
 internal class KrokoshaCasualtiesMPFix
 {
-    [HarmonyPrepare] public static bool Prepare() => AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent") != null;
-    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.DeclaredMethod(AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent"), "Update");
-    [HarmonyFinalizer] public static Exception Finalizer(Exception __e) => null;
+    private static Type TargetType => AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent");
+    
+    [HarmonyPrepare]
+    public static bool Prepare()
+    {
+        return TargetType != null;
+    }
+    
+    [HarmonyTargetMethod] 
+    public static MethodBase TargetMethod() 
+    {
+        return AccessTools.DeclaredMethod(TargetType, "Update");
+    }
+    
+    [HarmonyFinalizer] 
+    public static Exception Finalizer(Exception __e) => null;
 }
