@@ -26,30 +26,6 @@ _A BepInEx plugin for [Casualties Unknown](https://store.steampowered.com/app/45
 ### KrokoshaCasualtiesMP
 - Prevents `KrokoshaGunScriptTrackerComponent.Update()` from throwing a `NullReferenceException` when `PlayerCamera.main.body` is `null`.
 
-## Requirements
-
-- [BepInEx 5.x](https://github.com/BepInEx/BepInEx)
-
-## Installation
-
-1. Install BepInEx 5.x for Casualties Unknown.
-2. Download the latest `CUModFixer.dll` from [Releases](https://github.com/CNCUMC/CUModFixer/releases).
-3. Place `CUModFixer.dll` into `BepInEx/plugins/CUModFixer`.
-
-## Project Structure
-
-```
-CUModFixer/
-├── Plugin.cs                     # Entry point
-├── Fixers/
-│   ├── NewFirearmsFix.cs         # NewFirearms patches
-│   ├── NewClothingFix.cs         # NewClothing patches
-│   └── KrokoshaCasualtiesMPFix.cs# KrokoshaCasualtiesMP patches
-├── CHANGELOG.md / CHANGELOG_ZH.md
-├── README.md / README_ZH.md
-└── LICENSE.md
-```
-
 ## License
 
 [LGPL v3](LICENSE.md)
