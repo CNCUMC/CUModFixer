@@ -1,12 +1,13 @@
 using System;
-using BepInEx;
+using System.Reflection;
 using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-internal static class KrokoshaCasualtiesMPFix
+[HarmonyPatch]
+internal class KrokoshaCasualtiesMPFix
 {
-    [HarmonyPatch("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent", "Update")]
-    [HarmonyFinalizer]
-    public static Exception UpdateFinalizer(Exception __e) => null;
+    [HarmonyPrepare] public static bool Prepare() => AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent") != null;
+    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.Method(AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent"), "Update");
+    [HarmonyFinalizer] public static Exception Finalizer(Exception __e) => null;
 }

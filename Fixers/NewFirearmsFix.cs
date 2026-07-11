@@ -1,17 +1,20 @@
 using System;
-using BepInEx;
+using System.Reflection;
 using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-internal static class NewFirearmsFix
+// ── MpScareCheck ──
+[HarmonyPatch]
+internal class MpScareCheckGuard
 {
-    private static bool _isOnBackWarned;
-    private static bool _stunWarned;
+    private static Type TargetType => AccessTools.TypeByName("NewFirearms.RshGun");
 
-    [HarmonyPatch("NewFirearms.RshGun", "MpScareCheck")]
+    [HarmonyPrepare] public static bool Prepare() => TargetType != null;
+    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.Method(TargetType, "MpScareCheck");
+
     [HarmonyPrefix]
-    public static bool MpScareCheckPrefix(object __instance)
+    public static bool Prefix(object __instance)
     {
         try
         {
@@ -23,37 +26,55 @@ internal static class NewFirearmsFix
         catch { return false; }
     }
 
-    [HarmonyPatch("NewFirearms.RshGun", "MpScareCheck")]
     [HarmonyFinalizer]
-    public static Exception MpScareCheckFinalizer(Exception __e)
+    public static Exception Finalizer(Exception __e)
     {
         if (__e == null) return null;
         Plugin.Logger.LogWarning($"Suppressed NewFirearms MpScareCheck exception: {__e.Message}");
         return null;
     }
+}
 
-    [HarmonyPatch("NewFirearms.RshGun", "IsOnBack")]
+// ── IsOnBack ──
+[HarmonyPatch]
+internal class IsOnBackGuard
+{
+    private static bool _warned;
+
+    [HarmonyPrepare] public static bool Prepare() => AccessTools.TypeByName("NewFirearms.RshGun") != null;
+    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.Method(AccessTools.TypeByName("NewFirearms.RshGun"), "IsOnBack");
+
     [HarmonyFinalizer]
-    public static Exception IsOnBackFinalizer(Exception __e, ref bool __r)
+    public static Exception Finalizer(Exception __e, ref bool __r)
     {
         if (__e == null) return null;
-        if (!_isOnBackWarned) { Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__e.Message}"); _isOnBackWarned = true; }
+        if (!_warned) { Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__e.Message}"); _warned = true; }
         __r = false;
         return null;
     }
+}
 
-    [HarmonyPatch("NewFirearms.PlayerCameraPatch1", "HandleLegacyGunUi")]
-    [HarmonyFinalizer]
-    public static Exception HandleLegacyGunUiFinalizer(Exception __e) => null;
+// ── HandleLegacyGunUi ──
+[HarmonyPatch]
+internal class LegacyGunUiGuard
+{
+    [HarmonyPrepare] public static bool Prepare() => AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1") != null;
+    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.Method(AccessTools.TypeByName("NewFirearms.PlayerCameraPatch1"), "HandleLegacyGunUi");
+    [HarmonyFinalizer] public static Exception Finalizer(Exception __e) => null;
+}
 
-    // ── Stun collider log spam ──
-    [HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", [typeof(object)])]
+// ── Stun collider log spam ──
+[HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", new[] { typeof(object) })]
+internal class StunLogGuard
+{
+    private static bool _warned;
+
     [HarmonyPrefix]
-    public static bool StunLogPrefix(object message)
+    public static bool Prefix(object message)
     {
         if (message?.ToString()?.Contains("Can not add stun collider") != true) return true;
-        if (_stunWarned) return false;
-        _stunWarned = true;
+        if (_warned) return false;
+        _warned = true;
         return true;
     }
 }

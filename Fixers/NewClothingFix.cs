@@ -1,29 +1,20 @@
 using System;
 using System.Reflection;
-using BepInEx;
 using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-internal static class NewClothingFix
+[HarmonyPatch]
+internal class NewClothingFix
 {
-    private static Type Type => AccessTools.TypeByName("NewClothing.RshClothing");
+    private static Type TargetType => AccessTools.TypeByName("NewClothing.RshClothing");
     private static bool _warned;
 
-    [HarmonyPrepare]
-    public static bool Prepare()
-    {
-        var ok = Type != null;
-        if (ok) Plugin.Logger.LogInfo("  RshClothingGuard: target found");
-        return ok;
-    }
+    [HarmonyPrepare] public static bool Prepare() => TargetType != null;
+    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.Method(TargetType, "Update");
 
-    [HarmonyTargetMethod]
-    public static MethodBase Method() => AccessTools.Method(Type, "Update");
-
-    [HarmonyPatch("NewClothing.RshClothing", "Update")]
     [HarmonyFinalizer]
-    public static Exception UpdateFinalizer(Exception __e)
+    public static Exception Finalizer(Exception __e)
     {
         switch (__e)
         {
