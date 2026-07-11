@@ -9,5 +9,5 @@ internal static class KrokoshaCasualtiesMPFix
 {
     [HarmonyPatch("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent", "Update")]
     [HarmonyFinalizer]
-    public static Exception UpdateFin(Exception __e) => null;
+    public static Exception UpdateFinalizer(Exception __e) => null;
 }

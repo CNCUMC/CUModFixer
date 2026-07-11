@@ -26,7 +26,7 @@ internal static class NewFirearmsFix
 
     [HarmonyPatch("NewFirearms.RshGun", "MpScareCheck")]
     [HarmonyFinalizer]
-    public static Exception MpScareCheckFin(Exception __e)
+    public static Exception MpScareCheckFinalizer(Exception __e)
     {
         if (__e == null) return null;
         Plugin.Logger.LogWarning($"Suppressed NewFirearms MpScareCheck exception: {__e.Message}");
@@ -35,7 +35,7 @@ internal static class NewFirearmsFix
 
     [HarmonyPatch("NewFirearms.RshGun", "IsOnBack")]
     [HarmonyFinalizer]
-    public static Exception IsOnBackFin(Exception __e, ref bool __r)
+    public static Exception IsOnBackFinalizer(Exception __e, ref bool __r)
     {
         if (__e == null) return null;
         if (!_isOnBackWarned) { Plugin.Logger.LogWarning($"Suppressed NewFirearms IsOnBack exception: {__e.Message}"); _isOnBackWarned = true; }
@@ -45,7 +45,7 @@ internal static class NewFirearmsFix
 
     [HarmonyPatch("NewFirearms.PlayerCameraPatch1", "HandleLegacyGunUi")]
     [HarmonyFinalizer]
-    public static Exception HandleLegacyGunUiFin(Exception __e) => null;
+    public static Exception HandleLegacyGunUiFinalizer(Exception __e) => null;
 
     // ── Stun collider log spam ──
     [HarmonyPatch(typeof(UnityEngine.Debug), "LogWarning", [typeof(object)])]
