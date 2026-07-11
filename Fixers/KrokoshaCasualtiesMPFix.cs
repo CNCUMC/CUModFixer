@@ -1,20 +1,30 @@
 using System;
-using System.Reflection;
 using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-[HarmonyPatch]
 internal static class KrokoshaCasualtiesMPFix
 {
-    private static Type TargetType => AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent");
+    private static bool _installed;
 
-    [HarmonyPrepare]
-    public static bool Prepare() => TargetType != null;
+    internal static void Install(Harmony harmony)
+    {
+        if (_installed) return;
 
-    [HarmonyTargetMethod]
-    public static MethodBase TargetMethod() => AccessTools.Method(TargetType, "Update");
+        var trackerType = 
+            Type.GetType("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent, KrokoshaCasualtiesMP");
+        if (trackerType == null) return;
 
-    [HarmonyFinalizer]
+        var updateMethod = AccessTools.Method(trackerType, "Update");
+        if (updateMethod != null)
+        {
+            harmony.Patch(updateMethod,
+                finalizer: new HarmonyMethod(typeof(KrokoshaCasualtiesMPFix), nameof(UpdateFinalizer)));
+        }
+
+        _installed = true;
+        Plugin.Logger.LogInfo("Krokosha patches installed.");
+    }
+
     public static Exception UpdateFinalizer(Exception __exception) => null;
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -25,6 +24,8 @@ public class Plugin : BaseUnityPlugin
         AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoad;
         
         Fixers.NewFirearmsFix.Install(_staticHarmony);
+        Fixers.NewClothingFix.Install(_staticHarmony);
+        Fixers.KrokoshaCasualtiesMPFix.Install(_staticHarmony);
     }
     
     private static void OnAssemblyLoad(object sender, AssemblyLoadEventArgs args)

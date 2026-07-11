@@ -46,7 +46,7 @@
 param(
     [string]$ModNamespace = "CUModFixer",
     [string]$ModDisplayName = "CUModFixer",
-    [string]$ModVersion = "1.0.0",
+    [string]$ModVersion = "1.0.1",
     [int]$NexusModId = 424,
     [string]$Configuration = "Release",
     [string]$NexusApiKey = $env:NEXUS_API_KEY,
