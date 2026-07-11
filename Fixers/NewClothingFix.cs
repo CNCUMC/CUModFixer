@@ -11,7 +11,7 @@ internal class NewClothingFix
     private static bool _warned;
 
     [HarmonyPrepare] public static bool Prepare() => TargetType != null;
-    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.Method(TargetType, "Update");
+    [HarmonyTargetMethod] public static MethodBase TargetMethod() => AccessTools.DeclaredMethod(TargetType, "Update");
 
     [HarmonyFinalizer]
     public static Exception Finalizer(Exception __e)
