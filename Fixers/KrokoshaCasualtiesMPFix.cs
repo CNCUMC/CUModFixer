@@ -9,10 +9,12 @@ namespace CUModFixer.Fixers;
 internal static class KrokoshaUpdateGuard
 {
     [HarmonyPrepare]
-    public static bool Prepare() => AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent") != null;
+    public static bool Prepare() =>
+        AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent") != null;
 
     [HarmonyTargetMethod]
-    public static MethodInfo GetTargetMethod() => AccessTools.Method(AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent"), "Update");
+    public static MethodInfo GetTargetMethod() =>
+        AccessTools.Method(AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent"), "Update");
 
     [HarmonyFinalizer]
     public static void SuppressException(Exception __e)

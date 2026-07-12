@@ -4,8 +4,6 @@ using HarmonyLib;
 
 namespace CUModFixer;
 
-[BepInDependency("com.rushellxyz.newfirearms", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInDependency("com.rushellxyz.newclothing", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("KrokoshaCasualtiesMP", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(Guid, Name, Version)]
 public class Plugin : BaseUnityPlugin
