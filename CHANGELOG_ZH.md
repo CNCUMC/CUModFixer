@@ -6,24 +6,16 @@
 
 ---
 
-## v1.1.0
-
-### 新增
-
-- 添加 `BuildingEntityFix`：修复原版 `BuildingEntity.Update()` 在 `Resources.Load("DustBig")` 返回 `null` 时抛出
-  `ArgumentException` 的问题。
+## v1.1.1
 
 ### 变更
 
-- 重构所有 Fixer 使用 **Prefix 拦截**模式，从源头阻止异常发生，而非事后捕获。
-- 提取 `FixerHelper` 工具类，统一处理类型定位、补丁安装和异常抑制。
-- 改用 `Chainloader.PluginInfos` GUID 匹配识别已安装模组。
+- 将 `BuildingEntityFix` 重命名为 `GameFix`，专门用于放置原版游戏的修复。
+- 将 `Finalizer` 方法重命名为 `BuildingEntityUpdateFinalizer`，提高可读性。
+- 移除 `GameFix` 的显式 `Install()` 调用，由 `[HarmonyPatch]` 属性通过 `PatchAll()` 自动处理。
 
 ### 修复
 
-- `RshClothing.Update()` 空引用异常（`this.it` 为 null）
-- `KrokoshaGunScriptTrackerComponent.Update()` 空引用异常（`PlayerCamera.main.body` 为 null）
-- `RshGun.MpScareCheck()` 空引用异常
-- `RshGun.IsOnBack()` 空引用异常
-- `PlayerCameraPatch1.HandleLegacyGunUi()` 空引用异常
+- 为 `BuildingEntityUpdateFinalizer` 添加 `_warned` 标志位，防止警告日志刷屏（仅首次输出）。
+- 修复 `GameFix` 缺少 `[HarmonyFinalizer]` 属性导致 Finalizer 未被识别的问题。
 

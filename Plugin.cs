@@ -12,7 +12,7 @@ public class Plugin : BaseUnityPlugin
 {
     public const string Guid = "org.cncumc.cumodfixer";
     public const string Name = "CUModFixer";
-    public const string Version = "1.1.0";
+    public const string Version = "1.1.1";
     internal new static ManualLogSource Logger;
     private static Harmony _staticHarmony;
     private readonly Harmony _harmony = new(Guid);
@@ -22,8 +22,6 @@ public class Plugin : BaseUnityPlugin
         Logger = base.Logger;
         _harmony.PatchAll();
         _staticHarmony = _harmony;
-
-        BuildingEntityFix.Install(_staticHarmony);
 
         foreach (var guid in Chainloader.PluginInfos.Values.Select(mods => mods.Metadata.GUID))
             switch (guid)
