@@ -1,4 +1,6 @@
+using System;
 using HarmonyLib;
+using UnityEngine;
 
 namespace CUModFixer.Fixers;
 
