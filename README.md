@@ -6,25 +6,41 @@
 
 [GitHub](https://github.com/CNCUMC/CUModFixer) | [NexusMods](https://www.nexusmods.com/scavprototype/mods/424)
 
-_A BepInEx plugin for [Casualties Unknown](https://store.steampowered.com/app/4576490/) that fixes compatibility issues with third-party mods._
+_A BepInEx plugin for [Casualties Unknown](https://store.steampowered.com/app/4576490/) that fixes compatibility issues
+with third-party mods._
 
 ## Overview
 
-**CUMod Fixer** is a compatibility patch plugin that resolves conflicts between [Casualties Unknown](https://store.steampowered.com/app/4576490/), [KrokoshaCasualtiesMP](https://www.nexusmods.com/scavprototype/mods/67) (multiplayer mod), and third-party mods like [New Firearms](https://www.nexusmods.com/scavprototype/mods/122) and [New Clothing](https://www.nexusmods.com/scavprototype/mods/122).
+**CUMod Fixer** is a compatibility patch plugin that resolves conflicts
+between [Casualties Unknown](https://store.steampowered.com/app/4576490/), [KrokoshaCasualtiesMP](https://www.nexusmods.com/scavprototype/mods/67) (
+multiplayer mod), and third-party mods like [New Firearms](https://www.nexusmods.com/scavprototype/mods/122)
+and [New Clothing](https://www.nexusmods.com/scavprototype/mods/122).
 
-## Fix
+## Fixes
+
+### Vanilla Game
+
+- Prevents `BuildingEntity.Update()` from throwing `ArgumentException` when `Resources.Load("DustBig")` returns `null`.
 
 ### New Firearms
-- Prevents `RshGun.MpScareCheck()` from throwing exceptions when `KrokoshaScavMultiGameObjectNetworkTracker` is missing on the item.
-- Prevents `RshGun.IsOnBack()` from throwing a `NullReferenceException` when `NetPlayer.GetNetPlayerFromBody(body)` returns `null` during world generation.
-- Prevents `PlayerCameraPatch1.HandleLegacyGunUi()` from throwing a `NullReferenceException` when `PlayerCamera.body` is `null` during world generation.
-- Suppresses repeated "[NewFirearms] Can not add stun collider to spider" log warnings (only the first occurrence is logged).
+
+- Prevents `RshGun.MpScareCheck()` from throwing exceptions when `KrokoshaScavMultiGameObjectNetworkTracker` is missing
+  on the item.
+- Prevents `RshGun.IsOnBack()` from throwing a `NullReferenceException` when `NetPlayer.GetNetPlayerFromBody(body)`
+  returns `null` during world generation.
+- Prevents `PlayerCameraPatch1.HandleLegacyGunUi()` from throwing a `NullReferenceException` when `PlayerCamera.body` is
+  `null` during world generation.
+- Suppresses repeated "[NewFirearms] Can not add stun collider to spider" log warnings (only the first occurrence is
+  logged).
 
 ### New Clothing
+
 - Prevents `RshClothing.Update()` from throwing a `NullReferenceException` when `this.it` is `null`.
 
 ### KrokoshaCasualtiesMP
-- Prevents `KrokoshaGunScriptTrackerComponent.Update()` from throwing a `NullReferenceException` when `PlayerCamera.main.body` is `null`.
+
+- Prevents `KrokoshaGunScriptTrackerComponent.Update()` from throwing a `NullReferenceException` when
+  `PlayerCamera.main.body` is `null`.
 
 ## License
 

@@ -24,19 +24,9 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" IncludeAssets="compile"/>
     </ItemGroup>
 
-    <!-- CUCoreLib (CCL) -->
-<!--    <ItemGroup>-->
-<!--        <Reference Include="CUCoreLib">-->
-<!--            <HintPath>$(CUCoreLibDll)</HintPath>-->
-<!--        </Reference>-->
-<!--    </ItemGroup>-->
-
     <ItemGroup>
         <Reference Include="Assembly-CSharp">
             <HintPath>$(ManagedDir)/Assembly-CSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="NewFirearms">
-          <HintPath>F:\SteamLibrary\steamapps\common\Casualties Unknown Demo\BepInEx\plugins\NewFirearms.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
             <HintPath>$(ManagedDir)/UnityEngine.dll</HintPath>

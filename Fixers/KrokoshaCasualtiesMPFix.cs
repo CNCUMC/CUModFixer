@@ -1,25 +1,23 @@
-using System;
-using System.Reflection;
 using HarmonyLib;
 
 namespace CUModFixer.Fixers;
 
-// ── KrokoshaGunScriptTrackerComponent.Update ──
-[HarmonyPatch]
-internal static class KrokoshaUpdateGuard
+internal static class KrokoshaCasualtiesMPFix
 {
-    [HarmonyPrepare]
-    public static bool Prepare() =>
-        AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent") != null;
+    private static bool _installed;
 
-    [HarmonyTargetMethod]
-    public static MethodInfo GetTargetMethod() =>
-        AccessTools.Method(AccessTools.TypeByName("KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent"), "Update");
-
-    [HarmonyFinalizer]
-    public static void SuppressException(Exception __e)
+    internal static void Install(Harmony harmony)
     {
-        if (__e == null) return;
-        Plugin.Logger.LogWarning($"Suppressed Krokosha Update exception: {__e.Message}");
+        if (_installed) return;
+
+        FixerHelper.PatchMethodWithPrefix(harmony, typeof(KrokoshaCasualtiesMPFix), "KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent, KrokoshaCasualtiesMP", "Update", nameof(UpdatePrefix));
+
+        _installed = true;
+        Plugin.Logger.LogInfo("KrokoshaCasualtiesMP patches installed.");
+    }
+
+    public static bool UpdatePrefix()
+    {
+        return PlayerCamera.main?.body != null;
     }
 }

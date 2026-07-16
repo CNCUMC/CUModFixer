@@ -6,16 +6,23 @@
 
 ---
 
-## v1.0.2
+## v1.1.0
+
+### 新增
+
+- 添加 `BuildingEntityFix`：修复原版 `BuildingEntity.Update()` 在 `Resources.Load("DustBig")` 返回 `null` 时抛出 `ArgumentException` 的问题。
 
 ### 变更
 
-- **重构为 Harmony 注解模式** — 所有 fixer 类从手动 `Install(Harmony)` 迁移至 `[HarmonyPatch]` 注解，由 `PatchAll()` 自动发现
-- **Plugin.cs 简化** — 移除 `OnAssemblyLoad` 事件和手动 `Install()` 调用；使用 `[BepInDependency(SoftDependency)]` + `PatchAll()`
-- **NewFirearmsFix.cs 合并** — 4 个补丁守卫合并到一个文件，每方法独立 `[HarmonyPatch]` 属性
-- **KrokoshaCasualtiesMPFix.cs 转换** — 从手动 `Install()` 改为 `[HarmonyPatch("TypeName", "MethodName")]` 注解语法
-- **NewClothingFix.cs 转换** — 同上注解模式
+- 重构所有 Fixer 使用 **Prefix 拦截**模式，从源头阻止异常发生，而非事后捕获。
+- 提取 `FixerHelper` 工具类，统一处理类型定位、补丁安装和异常抑制。
+- 改用 `Chainloader.PluginInfos` GUID 匹配识别已安装模组。
 
 ### 修复
 
-- **NewClothing RshClothing 日志刷屏** — `RshClothing.Update` finalizer 仅首次输出 Warning，后续 NRE 静默抑制
+- `RshClothing.Update()` 空引用异常（`this.it` 为 null）
+- `KrokoshaGunScriptTrackerComponent.Update()` 空引用异常（`PlayerCamera.main.body` 为 null）
+- `RshGun.MpScareCheck()` 空引用异常
+- `RshGun.IsOnBack()` 空引用异常
+- `PlayerCameraPatch1.HandleLegacyGunUi()` 空引用异常
+

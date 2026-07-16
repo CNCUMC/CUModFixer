@@ -3,15 +3,20 @@
     [string]$ModNamespace = "CUModFixer"
 )
 
-function Convert-ToDisplayName {
+function Convert-ToDisplayName
+{
     param([string]$Namespace)
-    if ([string]::IsNullOrWhiteSpace($Namespace)) { return $Namespace }
+    if ( [string]::IsNullOrWhiteSpace($Namespace))
+    {
+        return $Namespace
+    }
 
     $result = [System.Text.StringBuilder]::new()
     $chars = $Namespace.ToCharArray()
     for ($i = 0; $i -lt $chars.Length; $i++) {
         $c = $chars[$i]
-        if ($i -gt 0 -and [char]::IsUpper($c) -and [char]::IsLower($chars[$i-1])) {
+        if ($i -gt 0 -and [char]::IsUpper($c) -and [char]::IsLower($chars[$i - 1]))
+        {
             $result.Append(' ') | Out-Null
         }
         $result.Append($c) | Out-Null
@@ -155,7 +160,25 @@ try
         {
             $content = Get-Content $GameLog -ReadCount 0 -Encoding UTF8
             for ($i = $lastReadPosition; $i -lt $content.Count; $i++) {
-                Write-ColoredMessage $content[$i] Magenta
+                $line = $content[$i]
+                $color = "White"
+                if ($line -match "^\[Error")
+                {
+                    $color = "Red"
+                }
+                elseif ($line -match "^\[Warning")
+                {
+                    $color = "Yellow"
+                }
+                elseif ($line -match "^\[Info")
+                {
+                    $color = "White"
+                }
+                elseif ($line -match "^\[Message")
+                {
+                    $color = "Blue"
+                }
+                Write-ColoredMessage $line $color
             }
             $lastReadPosition = $content.Count
         }
