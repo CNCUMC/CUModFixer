@@ -34,7 +34,7 @@ internal static class FixerHelper
 
         var methodInfo = AccessTools.Method(type2, methodName);
         if (methodInfo != null)
-            harmony.Patch(methodInfo, prefix: new HarmonyMethod(fixerType, prefixName));
+            harmony.Patch(methodInfo, new HarmonyMethod(fixerType, prefixName));
     }
 
     public static Exception SuppressNre(Exception ex, string methodName)

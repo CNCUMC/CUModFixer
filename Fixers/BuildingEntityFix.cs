@@ -12,7 +12,8 @@ internal static class BuildingEntityFix
     {
         if (_installed) return;
 
-        FixerHelper.PatchMethodWithPrefix(harmony, typeof(BuildingEntityFix), "BuildingEntity, Assembly-CSharp", "Update", nameof(UpdatePrefix));
+        FixerHelper.PatchMethodWithPrefix(harmony, typeof(BuildingEntityFix), "BuildingEntity, Assembly-CSharp",
+            "Update", nameof(UpdatePrefix));
 
         _installed = true;
         Plugin.Logger.LogInfo("BuildingEntity patches installed.");

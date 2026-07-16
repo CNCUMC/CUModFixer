@@ -11,11 +11,13 @@ to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- Added `BuildingEntityFix`: Fixes `BuildingEntity.Update()` throwing `ArgumentException` when `Resources.Load("DustBig")` returns `null`.
+- Added `BuildingEntityFix`: Fixes `BuildingEntity.Update()` throwing `ArgumentException` when
+  `Resources.Load("DustBig")` returns `null`.
 
 ### Changed
 
-- Refactored all Fixers to use **Prefix interception** pattern, preventing exceptions at the source instead of catching them after the fact.
+- Refactored all Fixers to use **Prefix interception** pattern, preventing exceptions at the source instead of catching
+  them after the fact.
 - Extracted `FixerHelper` utility class to centralize type resolution, patch installation, and exception suppression.
 - Switched to `Chainloader.PluginInfos` GUID matching for identifying installed mods.
 

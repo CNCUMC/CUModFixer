@@ -17,7 +17,8 @@ internal static class NewClothingFix
         if (type != null)
             _itField = AccessTools.Field(type, "it");
 
-        FixerHelper.PatchMethodWithPrefix(harmony, typeof(NewClothingFix), "NewClothing.RshClothing, NewClothing", "Update", nameof(UpdatePrefix));
+        FixerHelper.PatchMethodWithPrefix(harmony, typeof(NewClothingFix), "NewClothing.RshClothing, NewClothing",
+            "Update", nameof(UpdatePrefix));
 
         _installed = true;
         Plugin.Logger.LogInfo("NewClothing patches installed.");

@@ -1,6 +1,4 @@
-using System;
 using HarmonyLib;
-using UnityEngine;
 
 namespace CUModFixer.Fixers;
 
@@ -12,7 +10,9 @@ internal static class KrokoshaCasualtiesMPFix
     {
         if (_installed) return;
 
-        FixerHelper.PatchMethodWithPrefix(harmony, typeof(KrokoshaCasualtiesMPFix), "KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent, KrokoshaCasualtiesMP", "Update", nameof(UpdatePrefix));
+        FixerHelper.PatchMethodWithPrefix(harmony, typeof(KrokoshaCasualtiesMPFix),
+            "KrokoshaCasualtiesMP.KrokoshaGunScriptTrackerComponent, KrokoshaCasualtiesMP", "Update",
+            nameof(UpdatePrefix));
 
         _installed = true;
         Plugin.Logger.LogInfo("KrokoshaCasualtiesMP patches installed.");

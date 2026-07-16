@@ -26,7 +26,6 @@ public class Plugin : BaseUnityPlugin
         BuildingEntityFix.Install(_staticHarmony);
 
         foreach (var guid in Chainloader.PluginInfos.Values.Select(mods => mods.Metadata.GUID))
-        {
             switch (guid)
             {
                 case "com.rushellxyz.newclothing":
@@ -39,6 +38,5 @@ public class Plugin : BaseUnityPlugin
                     KrokoshaCasualtiesMPFix.Install(_staticHarmony);
                     break;
             }
-        }
     }
 }

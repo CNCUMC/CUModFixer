@@ -10,7 +10,8 @@
 
 ### 新增
 
-- 添加 `BuildingEntityFix`：修复原版 `BuildingEntity.Update()` 在 `Resources.Load("DustBig")` 返回 `null` 时抛出 `ArgumentException` 的问题。
+- 添加 `BuildingEntityFix`：修复原版 `BuildingEntity.Update()` 在 `Resources.Load("DustBig")` 返回 `null` 时抛出
+  `ArgumentException` 的问题。
 
 ### 变更
 
