@@ -7,16 +7,9 @@ to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## v1.1.1
-
-### Changed
-
-- Renamed `BuildingEntityFix` to `GameFix`, dedicated to vanilla game fixes.
-- Renamed `Finalizer` method to `BuildingEntityUpdateFinalizer` for better readability.
-- Removed explicit `Install()` call for `GameFix`; now handled automatically by `[HarmonyPatch]` attribute via `PatchAll()`.
+## v1.1.2
 
 ### Fixed
 
-- Added `_warned` flag to `BuildingEntityUpdateFinalizer` to prevent log spam (only outputs once).
-- Fixed `GameFix` missing `[HarmonyFinalizer]` attribute, causing the Finalizer to not be recognized.
+- Added `InitFinalizer` to catch `IndexOutOfRangeException` in `RshClothing.Init()` (caused by `secondryLimbsTexture` array length mismatch), with `_initWarned` flag to prevent log spam.
 

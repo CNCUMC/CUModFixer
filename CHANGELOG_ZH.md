@@ -6,16 +6,9 @@
 
 ---
 
-## v1.1.1
-
-### 变更
-
-- 将 `BuildingEntityFix` 重命名为 `GameFix`，专门用于放置原版游戏的修复。
-- 将 `Finalizer` 方法重命名为 `BuildingEntityUpdateFinalizer`，提高可读性。
-- 移除 `GameFix` 的显式 `Install()` 调用，由 `[HarmonyPatch]` 属性通过 `PatchAll()` 自动处理。
+## v1.1.2
 
 ### 修复
 
-- 为 `BuildingEntityUpdateFinalizer` 添加 `_warned` 标志位，防止警告日志刷屏（仅首次输出）。
-- 修复 `GameFix` 缺少 `[HarmonyFinalizer]` 属性导致 Finalizer 未被识别的问题。
+- 添加 `InitFinalizer` 捕获 `RshClothing.Init()` 中的 `IndexOutOfRangeException`（`secondryLimbsTexture` 数组长度不匹配），带 `_initWarned` 标志位防止日志刷屏。
 

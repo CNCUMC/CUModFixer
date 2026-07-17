@@ -12,7 +12,7 @@ public class Plugin : BaseUnityPlugin
 {
     public const string Guid = "org.cncumc.cumodfixer";
     public const string Name = "CUModFixer";
-    public const string Version = "1.1.1";
+    public const string Version = "1.1.2";
     internal new static ManualLogSource Logger;
     private static Harmony _staticHarmony;
     private readonly Harmony _harmony = new(Guid);
